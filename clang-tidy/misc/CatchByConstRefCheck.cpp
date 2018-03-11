@@ -48,7 +48,7 @@ void CatchByConstRefCheck::check(const MatchFinder::MatchResult &Result) {
     // If it's not a pointer and not a reference then it must be caught "by
     // value".
     diag(varDecl->getLocStart(), diagMsgCatchReference);
-  } else if (!caughtType.isConstant(context)) {
+  } else if (!caughtType.isConstQualified()) {
     const char *diagMsgCatchReference = "catch handler catches by non const reference; "
                                         "catching by const-reference may be more efficient";
     // Emit error message if the type is not const (ref)s
