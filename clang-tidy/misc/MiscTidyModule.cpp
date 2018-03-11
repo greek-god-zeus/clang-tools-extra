@@ -10,6 +10,7 @@
 #include "../ClangTidy.h"
 #include "../ClangTidyModule.h"
 #include "../ClangTidyModuleRegistry.h"
+#include "CatchByConstRefCheck.h"
 #include "DefinitionsInHeadersCheck.h"
 #include "MacroParenthesesCheck.h"
 #include "MisplacedConstCheck.h"
@@ -34,6 +35,8 @@ namespace misc {
 class MiscModule : public ClangTidyModule {
 public:
   void addCheckFactories(ClangTidyCheckFactories &CheckFactories) override {
+    CheckFactories.registerCheck<CatchByConstRefCheck>(
+        "misc-catch-by-const-ref");
     CheckFactories.registerCheck<MisplacedConstCheck>("misc-misplaced-const");
     CheckFactories.registerCheck<UnconventionalAssignOperatorCheck>(
         "misc-unconventional-assign-operator");

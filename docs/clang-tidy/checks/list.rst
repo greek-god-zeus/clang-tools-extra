@@ -139,6 +139,7 @@ Clang-Tidy Checks
    llvm-include-order
    llvm-namespace-comment
    llvm-twine-local
+   misc-catch-by-const-ref
    misc-definitions-in-headers
    misc-macro-parentheses
    misc-misplaced-const
