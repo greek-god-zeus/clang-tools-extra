@@ -22,39 +22,18 @@ void CatchByConstRefCheck::registerMatchers(MatchFinder *Finder) {
   if (!getLangOpts().CPlusPlus)
     return;
 
-  Finder->addMatcher(cxxCatchStmt().bind("catch"), this);
+  Finder->addMatcher(varDecl(isExceptionVariable(),hasType(references(qualType(unless(isConstQualified()))))).bind("catch"), this);
 }
 
 void CatchByConstRefCheck::check(const MatchFinder::MatchResult &Result) {
 
-  const CXXCatchStmt* catchStmt = Result.Nodes.getNodeAs<CXXCatchStmt>("catch");
-  auto& context = *Result.Context;
-  
-  if (!catchStmt)
-    return;
-  auto caughtType = catchStmt->getCaughtType();
-  if (caughtType.isNull())
-    return;
-  auto *varDecl = catchStmt->getExceptionDecl();
-  if (const auto *PT = caughtType.getCanonicalType()->getAs<PointerType>()) {
-    const char *diagMsgCatchReference = "catch handler catches a pointer value; "
-                                        "should throw a non-pointer value and "
-                                        "catch by reference instead";
-    // We forbid raising sring exceptions as well, contrary to the other check.
-    diag(varDecl->getLocStart(), diagMsgCatchReference);
-  } else if (!caughtType->isReferenceType()) {
-    const char *diagMsgCatchReference = "catch handler catches by value; "
-                                        "should catch by reference instead";
-    // If it's not a pointer and not a reference then it must be caught "by
-    // value".
-    diag(varDecl->getLocStart(), diagMsgCatchReference);
-  } else if (!caughtType.isConstQualified()) {
-    const char *diagMsgCatchReference = "catch handler catches by non const reference; "
-                                        "catching by const-reference may be more efficient";
-    // Emit error message if the type is not const (ref)s
-    diag(varDecl->getLocStart(), diagMsgCatchReference);
-  }
+  const VarDecl* varCatch = Result.Nodes.getNodeAs<VarDecl>("catch");
 
+  const char *diagMsgCatchReference = "catch handler catches by non const reference; "
+                                        "catching by const-reference may be more efficient";
+
+  // Emit error message if the type is not const (ref)s
+  diag(varCatch->getLocStart(), diagMsgCatchReference);
 }
 
 } // namespace misc
