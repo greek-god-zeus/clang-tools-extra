@@ -141,6 +141,7 @@ Clang-Tidy Checks
    llvm-twine-local
    misc-catch-by-const-ref
    misc-definitions-in-headers
+   misc-detect-c-functions
    misc-macro-parentheses
    misc-misplaced-const
    misc-new-delete-overloads

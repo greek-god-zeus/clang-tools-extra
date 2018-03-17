@@ -57,6 +57,11 @@ The improvements are...
 Improvements to clang-tidy
 --------------------------
 
+- New `misc-detect-c-functions
+  <http://clang.llvm.org/extra/clang-tidy/checks/misc-detect-c-functions.html>`_ check
+
+  FIXME: add release notes.
+
 - New `misc-catch-by-const-ref
   <http://clang.llvm.org/extra/clang-tidy/checks/misc-catch-by-const-ref.html>`_ check
 

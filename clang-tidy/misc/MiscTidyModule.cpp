@@ -12,6 +12,7 @@
 #include "../ClangTidyModuleRegistry.h"
 #include "CatchByConstRefCheck.h"
 #include "DefinitionsInHeadersCheck.h"
+#include "DetectCFunctionsCheck.h"
 #include "MacroParenthesesCheck.h"
 #include "MisplacedConstCheck.h"
 #include "NewDeleteOverloadsCheck.h"
@@ -37,6 +38,8 @@ public:
   void addCheckFactories(ClangTidyCheckFactories &CheckFactories) override {
     CheckFactories.registerCheck<CatchByConstRefCheck>(
         "misc-catch-by-const-ref");
+    CheckFactories.registerCheck<DetectCFunctionsCheck>(
+        "misc-detect-c-functions");
     CheckFactories.registerCheck<MisplacedConstCheck>("misc-misplaced-const");
     CheckFactories.registerCheck<UnconventionalAssignOperatorCheck>(
         "misc-unconventional-assign-operator");
