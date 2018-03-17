@@ -12,6 +12,7 @@
 
 #include "../ClangTidy.h"
 
+#include <string>
 #include <unordered_set>
 #include <unordered_map>
 
@@ -28,13 +29,13 @@ public:
   DetectCFunctionsCheck(StringRef Name, ClangTidyContext *Context);
   void registerMatchers(ast_matchers::MatchFinder *Finder) override;
   void check(const ast_matchers::MatchFinder::MatchResult &Result) override;
-  
+
   void storeOptions(ClangTidyOptions::OptionMap &Opts) override;
 
 private:
   void parseStdFunctions();
   void parseFunctionToChange();
-    
+
   const std::string stdNamespaceFunctions;
   const std::string functionsToChange;
 
