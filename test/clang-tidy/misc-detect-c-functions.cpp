@@ -23,7 +23,7 @@ void function()
     std::abs(-1);
     fabs(-1);
     // CHECK-MESSAGES: :[[@LINE-1]]:4: warning: this function has a better version. Consider using it (std::abs) [misc-detect-c-functions]
-    // CHECK-FIXES: {{^}}    std::abs(5);{{$}}
+    // CHECK-FIXES: {{^}}    std::abs(-1);{{$}}
 
     Foo bar;
     bar.exp(5);

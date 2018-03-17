@@ -32,28 +32,34 @@ void DetectCFunctionsCheck::registerMatchers(MatchFinder *Finder) {
     // Should check if there are duplicates.
     for(auto fun: stdNamespaceFunctionsSet)
     {
-      Finder->addMatcher(callExpr(callee(functionDecl(hasName(fun)))).bind(fun), this);
+      Finder->addMatcher(callExpr(callee(functionDecl(hasName(fun), unless(cxxMethodDecl()), isExternC()))).bind(fun), this);
     }
     for(auto fun: functionsToChangeMap)
     {
-      Finder->addMatcher(callExpr(callee(functionDecl(hasName(fun.first)))).bind(fun.first), this);
+      Finder->addMatcher(callExpr(callee(functionDecl(hasName(fun.first), unless(cxxMethodDecl()), isExternC()))).bind(fun.first), this);
     }
 }
 
 void DetectCFunctionsCheck::check(const MatchFinder::MatchResult &Result) {
+
     for(const auto& fun: stdNamespaceFunctionsSet)
     {
         const CallExpr* call = Result.Nodes.getNodeAs<CallExpr>(fun);
         if(call)
+        {
             diag(call->getLocStart(), "this function has a corresponding std version. Consider using it (std::" + fun + ")")
                 << FixItHint::CreateInsertion(call->getLocStart(), "std::");
+        }
     }
     for(const auto& fun: functionsToChangeMap)
     {
         const CallExpr* call = Result.Nodes.getNodeAs<CallExpr>(fun.first);
         if(call)
-            diag(call->getLocStart(), "this function has a better version. Consider using it (" + fun.second + ")")
-                << FixItHint::CreateReplacement(SourceRange(call->getLocStart(), call->getLocEnd()), fun.second);
+        {
+            auto start = call->getLocStart();
+            diag(start, "this function has a better version. Consider using it (" + fun.second + ")")
+                << FixItHint::CreateReplacement(SourceRange(start, start.getLocWithOffset(fun.first.size() - 1)), fun.second);
+        }
     }
 }
 
