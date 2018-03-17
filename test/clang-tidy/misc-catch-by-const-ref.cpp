@@ -14,6 +14,7 @@ void catchbyRef() {
     check();
   } catch (logic_error& e) {
     // CHECK-MESSAGES: :[[@LINE-1]]:12: warning: catch handler catches by non const reference; catching by const-reference may be more efficient [misc-catch-by-const-ref]
+    // CHECK-FIXES: {{^}}  } catch (const logic_error& e) {{{$}}
   }
 }
 

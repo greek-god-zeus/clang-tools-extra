@@ -33,7 +33,8 @@ void CatchByConstRefCheck::check(const MatchFinder::MatchResult &Result) {
                                         "catching by const-reference may be more efficient";
 
   // Emit error message if the type is not const (ref)s
-  diag(varCatch->getLocStart(), diagMsgCatchReference);
+  diag(varCatch->getLocStart(), diagMsgCatchReference)
+    << FixItHint::CreateInsertion(varCatch->getLocStart(), "const ");
 }
 
 } // namespace misc
