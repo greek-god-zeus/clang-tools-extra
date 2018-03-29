@@ -29,14 +29,16 @@ DetectCFunctionsCheck::DetectCFunctionsCheck(StringRef Name, ClangTidyContext *C
 }
 
 void DetectCFunctionsCheck::registerMatchers(MatchFinder *Finder) {
+    if (!getLangOpts().CPlusPlus)
+        return;
     // Should check if there are duplicates.
     for(auto fun: stdNamespaceFunctionsSet)
     {
-      Finder->addMatcher(callExpr(callee(functionDecl(hasName(fun), unless(cxxMethodDecl()), isExternC()))).bind(fun), this);
+      Finder->addMatcher(callExpr(callee(allOf(functionDecl(hasName(fun), isExternC())))).bind(fun), this);
     }
     for(auto fun: functionsToChangeMap)
     {
-      Finder->addMatcher(callExpr(callee(functionDecl(hasName(fun.first), unless(cxxMethodDecl()), isExternC()))).bind(fun.first), this);
+      Finder->addMatcher(callExpr(callee(allOf(functionDecl(hasName(fun.first), isExternC())))).bind(fun.first), this);
     }
 }
 
