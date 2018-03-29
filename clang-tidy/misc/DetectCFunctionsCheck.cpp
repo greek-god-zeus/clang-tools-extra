@@ -34,11 +34,11 @@ void DetectCFunctionsCheck::registerMatchers(MatchFinder *Finder) {
     // Should check if there are duplicates.
     for(auto fun: stdNamespaceFunctionsSet)
     {
-      Finder->addMatcher(callExpr(callee(allOf(functionDecl(hasName(fun), isExternC())))).bind(fun), this);
+      Finder->addMatcher(callExpr(callee(allOf(functionDecl(hasName(fun), hasParent(translationUnitDecl()))))).bind(fun), this);
     }
     for(auto fun: functionsToChangeMap)
     {
-      Finder->addMatcher(callExpr(callee(allOf(functionDecl(hasName(fun.first), isExternC())))).bind(fun.first), this);
+      Finder->addMatcher(callExpr(callee(allOf(functionDecl(hasName(fun.first), hasParent(translationUnitDecl()))))).bind(fun.first), this);
     }
 }
 
